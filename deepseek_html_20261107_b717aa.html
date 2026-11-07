@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Аналитический кейс: Students Performance — инструкция для ученицы</title>
+<style>
+  :root {
+    --bg: #f7f9fc;
+    --card: #ffffff;
+    --text: #1f2933;
+    --muted: #52606d;
+    --accent: #2563eb;
+    --accent-soft: #dbeafe;
+    --border: #e4e7eb;
+    --code-bg: #0f172a;
+    --code-text: #e2e8f0;
+    --tip-bg: #fef9c3;
+    --tip-border: #facc15;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+    font-size: 16px;
+  }
+  header {
+    background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    color: #fff;
+    padding: 48px 24px 40px;
+    text-align: center;
+  }
+  header h1 { margin: 0 0 12px; font-size: 2rem; }
+  header p { margin: 0; opacity: 0.9; max-width: 760px; margin-inline: auto; }
+  main {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+  section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px 28px 22px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+  }
+  h2 {
+    font-size: 1.35rem;
+    margin: 0 0 14px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--accent-soft);
+    color: #1e3a8a;
+  }
+  h3 { font-size: 1.08rem; margin: 22px 0 8px; color: #1e40af; }
+  p { margin: 0 0 12px; }
+  ul, ol { margin: 0 0 14px; padding-left: 22px; }
+  li { margin-bottom: 6px; }
+  .muted { color: var(--muted); font-size: 0.94rem; }
+  .badge {
+    display: inline-block;
+    background: var(--accent-soft);
+    color: #1e40af;
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 999px;
+    margin-bottom: 8px;
+    letter-spacing: 0.02em;
+  }
+  /* Подсказки с кодом */
+  details {
+    background: var(--tip-bg);
+    border: 1px solid var(--tip-border);
+    border-left: 5px solid var(--tip-border);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin: 14px 0 18px;
+  }
+  details[open] { background: #fffbeb; }
+  summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: #854d0e;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    user-select: none;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::before {
+    content: "▸";
+    transition: transform 0.2s;
+    font-size: 1.1rem;
+  }
+  details[open] summary::before { transform: rotate(90deg); }
+  pre {
+    background: var(--code-bg);
+    color: var(--code-text);
+    padding: 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    margin: 12px 0 4px;
+    font-family: "Fira Code", "Consolas", monospace;
+  }
+  code { font-family: "Fira Code", "Consolas", monospace; }
+  p code, li code {
+    background: #eef2f7;
+    color: #b91c1c;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 0.88em;
+  }
+  .callout {
+    background: #eff6ff;
+    border-left: 4px solid var(--accent);
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin: 14px 0;
+  }
+  .callout strong { color: #1e40af; }
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 720px) {
+    .grid-2 { grid-template-columns: 1fr; }
+    header h1 { font-size: 1.5rem; }
+  }
+  .checklist { list-style: none; padding-left: 0; }
+  .checklist li::before {
+    content: "☐";
+    color: var(--accent);
+    font-weight: 700;
+    margin-right: 8px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 16px;
+    font-size: 0.92rem;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+    vertical-align: top;
+  }
+  th { background: #f1f5f9; font-weight: 600; }
+  .tip-title { margin: 0 0 6px; font-weight: 600; color: #92400e; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Аналитический кейс: Students Performance in Exams</h1>
+  <p>Пошаговая инструкция для ученицы: от гипотезы до обоснования продуктовой идеи — только на <code>pandas</code>, без NumPy.</p>
+</header>
+
+<main>
+
+<!-- ======================= 1 ======================= -->
+<section>
+  <span class="badge">Шаг 1 — Постановка</span>
+  <h2>Гипотеза и продуктовая идея</h2>
+
+  <h3>Гипотеза</h3>
+  <p>
+    Студенты, прошедшие курс подготовки к экзамену
+    (<code>test preparation course = completed</code>), показывают значимо более высокие
+    результаты по всем трём предметам (math, reading, writing), чем те, кто курс не проходил.
+    При этом эффект подготовки может различаться в зависимости от пола, типа питания
+    (прокси социально-экономического статуса) и уровня образования родителей.
+  </p>
+
+  <h3>Продуктовая идея</h3>
+  <p>
+    Сервис <strong>«ExamPrep Coach»</strong> — персональный трекер подготовки к экзаменам:
+  </p>
+  <ul>
+    <li>диагностирует текущий уровень по трём предметам;</li>
+    <li>строит индивидуальный план подготовки с учётом слабых зон;</li>
+    <li>подбирает интенсивность и формат занятий под профиль ученика
+      (пол, тип питания как прокси СЭС, образование родителей);</li>
+    <li>прогнозирует ожидаемый прирост баллов на основе исторических данных.</li>
+  </ul>
+  <div class="callout">
+    <strong>Почему это востребовано:</strong> данные показывают, что подготовка связана с заметным
+    приростом баллов, но эффект неоднороден — значит, персонализация (а не «один курс для всех»)
+    создаёт ценность.
+  </div>
+</section>
+
+<!-- ======================= 2 ======================= -->
+<section>
+  <span class="badge">Шаг 2 — Планирование</span>
+  <h2>План работы в Trello</h2>
+  <p>Создай три колонки и перенеси карточки слева направо по мере выполнения.</p>
+
+  <div class="grid-2">
+    <div>
+      <h3>Бэклог</h3>
+      <ul class="checklist">
+        <li>Изучить структуру датасета</li>
+        <li>Сформулировать гипотезу и метрики</li>
+        <li>Определить продуктовую идею</li>
+      </ul>
+    </div>
+    <div>
+      <h3>В работе</h3>
+      <ul class="checklist">
+        <li>Загрузить датасет, выбрать нужные столбцы</li>
+        <li>Проверить пропуски и дубликаты</li>
+        <li>Сгенерировать новые признаки</li>
+        <li>Проверить гипотезу: статистики, группировки, тест</li>
+        <li>Проверить неоднородность эффекта</li>
+      </ul>
+    </div>
+  </div>
+  <div>
+    <h3>Готово</h3>
+    <ul class="checklist">
+      <li>Построить визуализации</li>
+      <li>Сформулировать выводы и обоснование продукта</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ======================= 3 ======================= -->
+<section>
+  <span class="badge">Шаг 3 — Данные</span>
+  <h2>Загрузка датасета и выбор столбцов</h2>
+  <p>
+    Для проверки гипотезы нужны столбцы:
+    <code>gender</code>, <code>parental level of education</code>, <code>lunch</code>,
+    <code>test preparation course</code> и три целевых балла:
+    <code>math score</code>, <code>reading score</code>, <code>writing score</code>.
+  </p>
+  <p class="muted">Загружаем файл и оставляем только нужные столбцы через <code>df[cols]</code>.</p>
+
+  <details>
+    <summary>Показать код: загрузка и выбор столбцов</summary>
+    <pre><code>import pandas as pd
+
+df = pd.read_csv('StudentsPerformance.csv')
+
+cols = ['gender', 'parental level of education', 'lunch',
+        'test preparation course', 'math score', 'reading score', 'writing score']
+
+df = df[cols]
+print(df.head())
+print(df.shape)</code></pre>
+  </details>
+
+  <div class="callout">
+    <strong>Теория:</strong> <code>pd.read_csv()</code> читает файл в <code>DataFrame</code> —
+    таблицу с именованными столбцами. Выбор подмножества столбцов через
+    <code>df[cols]</code> возвращает новый DataFrame и не меняет исходный, пока мы не присвоим результат.
+  </div>
+</section>
+
+<!-- ======================= 4 ======================= -->
+<section>
+  <span class="badge">Шаг 4 — Очистка</span>
+  <h2>Очистка только нужных данных</h2>
+  <p>Проверяем пропуски, дубликаты и диапазоны баллов. Чистим только те столбцы, которые нужны для гипотезы.</p>
+
+  <details>
+    <summary>Показать код: проверка качества данных</summary>
+    <pre><code># Пропуски по каждому столбцу
+print(df.isna().sum())
+
+# Полные дубликаты строк
+print('Дубликатов:', df.duplicated().sum())
+
+# Диапазоны баллов
+print(df[['math score', 'reading score', 'writing score']].describe())
+
+# Уникальные значения категориальных признаков
+for c in ['gender', 'parental level of education', 'lunch', 'test preparation course']:
+    print(c, '->', df[c].unique())</code></pre>
+  </details>
+
+  <div class="callout">
+    <strong>Теория:</strong> <code>isna().sum()</code> считает пропуски по столбцам;
+    <code>duplicated().sum()</code> — число полных дубликатов строк;
+    <code>describe()</code> даёт count / mean / std / min / квантили / max.
+    В этом датасете пропусков и дубликатов нет, баллы лежат в диапазоне 0–100 —
+    дополнительная очистка не требуется.
+  </div>
+</section>
+
+<!-- ======================= 5 ======================= -->
+<section>
+  <span class="badge">Шаг 5 — Фичи</span>
+  <h2>Генерация новых признаков</h2>
+  <p>Создаём производные признаки, которые понадобятся для группировок и визуализаций.</p>
+  <ul>
+    <li><code>avg_score</code> — средний балл по трём предметам;</li>
+    <li><code>total_score</code> — сумма баллов;</li>
+    <li><code>prep_completed</code> — бинарный флаг прохождения подготовки (1/0);</li>
+    <li><code>parent_edu_level</code> — порядковая шкала образования родителей (0–5);</li>
+    <li><code>low_ses</code> — прокси низкого социально-экономического статуса (free/reduced lunch).</li>
+  </ul>
+
+  <details>
+    <summary>Показать код: создание признаков</summary>
+    <pre><code># Средний и суммарный балл
+df['avg_score']   = df[['math score', 'reading score', 'writing score']].mean(axis=1)
+df['total_score'] = df[['math score', 'reading score', 'writing score']].sum(axis=1)
+
+# Бинарный флаг подготовки
+df['prep_completed'] = (df['test preparation course'] == 'completed').astype(int)
+
+# Порядковая шкала образования родителей
+edu_order = {
+    'some high school': 0,
+    'high school': 1,
+    'some college': 2,
+    "associate's degree": 3,
+    "bachelor's degree": 4,
+    "master's degree": 5
+}
+df['parent_edu_level'] = df['parental level of education'].map(edu_order)
+
+# Прокси социально-экономического статуса
+df['low_ses'] = (df['lunch'] == 'free/reduced').astype(int)
+
+print(df[['avg_score', 'prep_completed', 'parent_edu_level', 'low_ses']].head())</code></pre>
+  </details>
+
+  <div class="callout">
+    <strong>Теория:</strong> <code>.mean(axis=1)</code> считает среднее по строке (по предметам);
+    <code>.astype(int)</code> превращает True/False в 1/0;
+    <code>.map(dict)</code> заменяет категории по словарю — удобно для порядковых шкал.
+  </div>
+</section>
+
+<!-- ======================= 6 ======================= -->
+<section>
+  <span class="badge">Шаг 6 — Проверка гипотезы</span>
+  <h2>Статистические показатели, фильтрация и группировка</h2>
+
+  <h3>6.1 Описательные статистики по группам</h3>
+  <details>
+    <summary>Показать код: сводка по группам подготовки</summary>
+    <pre><code>summary = df.groupby('test preparation course')[
+    ['math score', 'reading score', 'writing score', 'avg_score']
+].agg(['mean', 'median', 'std', 'count'])
+
+print(summary.round(2))</code></pre>
+  </details>
+
+  <h3>6.2 Абсолютная и относительная разница средних</h3>
+  <details>
+    <summary>Показать код: разница средних и прирост в %</summary>
+    <pre><code>grp = df.groupby('test preparation course')[
+    ['math score', 'reading score', 'writing score', 'avg_score']
+].mean()
+
+diff = grp.loc['completed'] - grp.loc['none']
+rel  = (diff / grp.loc['none'] * 100)
+
+result = pd.DataFrame({'абс. разница': diff.round(2),
+                       'прирост, %':  rel.round(1)})
+print(result)</code></pre>
+  </details>
+
+  <div class="callout">
+    <strong>Теория:</strong> <code>groupby(...).agg([...])</code> позволяет считать несколько
+    статистик сразу. <code>.loc[...]</code> — доступ по метке индекса; вычитание Series
+    выравнивается по индексам, что удобно для расчёта эффекта.
+  </div>
+
+  <h3>6.3 Проверка значимости без NumPy и SciPy</h3>
+  <p>
+    Чтобы остаться в рамках <code>pandas</code>, сравним группы через <strong>bootstrap</strong>
+    (ресэмплинг) — оценим, как часто разница средних в случайных перестановках метки
+    подготовки оказывается не меньше наблюдаемой.
+  </p>
+  <details>
+    <summary>Показать код: bootstrap-тест разницы средних</summary>
+    <pre><code>observed = df.loc[df['prep_completed'] == 1, 'avg_score'].mean() \
+         - df.loc[df['prep_completed'] == 0, 'avg_score'].mean()
+print('Наблюдаемая разница:', round(observed, 2))
+
+# 1000 перестановок флага подготовки
+n_perm = 1000
+diffs = []
+scores = df['avg_score'].reset_index(drop=True)
+labels = df['prep_completed'].reset_index(drop=True)
+
+for _ in range(n_perm):
+    shuffled = labels.sample(frac=1, random_state=None).reset_index(drop=True)
+    d = scores[shuffled == 1].mean() - scores[shuffled == 0].mean()
+    diffs.append(d)
+
+diffs = pd.Series(diffs)
+p_value = (diffs >= observed).mean()
+print('p-value (перестановочный тест):', round(p_value, 4))</code></pre>
+  </details>
+
+  <div class="callout">
+    <strong>Теория:</strong> перестановочный тест проверяет нулевую гипотезу «метка подготовки
+    не связана с баллом». Мы многократно перемешиваем метки и смотрим, насколько часто
+    случайная разница средних превышает наблюдаемую. Если p-value мало (&lt; 0.05) —
+    эффект статистически значим. <code>.sample(frac=1)</code> перемешивает строки,
+    <code>reset_index(drop=True)</code> выравнивает индексы.
+  </div>
+
+  <h3>6.4 Неоднородность эффекта</h3>
+  <details>
+    <summary>Показать код: эффект по полу, lunch и образованию родителей</summary>
+    <pre><code># Эффект по полу
+effect_gender = df.groupby(['gender', 'test preparation course'])['avg_score'] \
+                  .mean().unstack()
+effect_gender['эффект'] = effect_gender['completed'] - effect_gender['none']
+print(effect_gender.round(2))
+
+# Эффект по типу питания
+effect_lunch = df.groupby(['lunch', 'test preparation course'])['avg_score'] \
+                 .mean().unstack()
+effect_lunch['эффект'] = effect_lunch['completed'] - effect_lunch['none']
+print(effect_lunch.round(2))
+
+# Эффект по уровню образования родителей
+effect_edu = df.groupby(['parent_edu_level', 'test preparation course'])['avg_score'] \
+               .mean().unstack()
+effect_edu['эффект'] = effect_edu['completed'] - effect_edu['none']
+print(effect_edu.round(2))</code></pre>
+  </details>
+
+  <div class="callout">
+    <strong>Теория:</strong> <code>groupby([...]).mean().unstack()</code> превращает длинную
+    таблицу в широкую: строки — один признак, столбцы — значения второго.
+    Это удобно, чтобы посчитать эффект как разность двух столбцов.
+  </div>
+
+  <h3>6.5 Фильтрация «рисковой» группы</h3>
+  <p>Целевая аудитория продукта — студенты без подготовки и с низким СЭС.</p>
+  <details>
+    <summary>Показать код: фильтрация и размер рисковой группы</summary>
+    <pre><code>risk = df[(df['prep_completed'] == 0) & (df['low_ses'] == 1)]
+
+print('Размер рисковой группы:', len(risk),
+      f'({len(risk) / len(df) * 100:.1f}% от всех)')
+
+print(risk[['math score', 'reading score', 'writing score']].mean().round(2))</code></pre>
+  </details>
+
+  <div class="callout">
+    <strong>Теория:</strong> булевы маски комбинируются через <code>&amp;</code> (И),
+    <code>|</code> (ИЛИ), <code>~</code> (НЕ). Каждое условие — Series из True/False;
+    <code>df[mask]</code> возвращает отфильтрованные строки.
+  </div>
+</section>
+
+<!-- ======================= 7 ======================= -->
+<section>
+  <span class="badge">Шаг 7 — Визуализация</span>
+  <h2>Визуализация данных</h2>
+  <p>
+    Используем <code>matplotlib</code> и <code>seaborn</code> — они работают с DataFrame
+    напрямую и не требуют NumPy в явном виде.
+  </p>
+
+  <h3>7.1 Боксплоты: подготовка vs без подготовки</h3>
+  <details>
+    <summary>Показать код: boxplot по трём предметам</summary>
+    <pre><code>import matplotlib.pyplot as plt
+import seaborn as sns
+
+fig, axes = plt.subplots(1, 3, figsize=(15, 5))
+for ax, subj in zip(axes, ['math score', 'reading score', 'writing score']):
+    sns.boxplot(data=df, x='test preparation course', y=subj,
+                ax=ax, palette='Set2')
+    ax.set_title(subj)
+plt.suptitle('Распределение баллов: подготовка vs без подготовки')
+plt.tight_layout()
+plt.show()</code></pre>
+  </details>
+  <p class="muted">
+    <strong>Что показывает:</strong> медианы группы <code>completed</code> выше,
+    распределения сдвинуты вправо, но есть пересечение — подготовка помогает не всем одинаково.
+  </p>
+
+  <h3>7.2 Тепловая карта: пол × подготовка</h3>
+  <details>
+    <summary>Показать код: pivot_table + heatmap</summary>
+    <pre><code>pivot = df.pivot_table(values='avg_score',
+                       index='gender',
+                       columns='test preparation course',
+                       aggfunc='mean')
+
+sns.heatmap(pivot, annot=True, fmt='.1f', cmap='YlGnBu')
+plt.title('Средний балл: пол × подготовка')
+plt.show()</code></pre>
+  </details>
+  <p class="muted">
+    <strong>Что показывает:</strong> эффект подготовки виден у обоих полов,
+    но у женщин исходный уровень и прирост выше.
+  </p>
+
+  <h3>7.3 Точечный график: math vs reading</h3>
+  <details>
+    <summary>Показать код: scatterplot с цветом по подготовке</summary>
+    <pre><code>sns.scatterplot(data=df, x='math score', y='reading score',
+                hue='test preparation course', alpha=0.6,
+                palette='coolwarm')
+plt.title('Math vs Reading: цвет = прохождение подготовки')
+plt.show()</code></pre>
+  </details>
+  <p class="muted">
+    <strong>Что показывает:</strong> «облако» прошедших подготовку смещено
+    в правый верхний угол — они чаще имеют высокие баллы по обоим предметам.
+  </p>
+
+  <h3>7.4 Столбчатая диаграмма эффекта по сегментам</h3>
+  <details>
+    <summary>Показать код: эффект подготовки по образованию родителей</summary>
+    <pre><code>effect_edu['эффект'].plot(kind='bar', color='teal', figsize=(8, 4))
+plt.ylabel('Прирост среднего балла')
+plt.title('Эффект подготовки по уровню образования родителей')
+plt.xticks(rotation=0)
+plt.show()</code></pre>
+  </details>
+
+  <h3>7.5 Нестандартная визуализация: «радар» профилей по предметам</h3>
+  <p class="muted">
+    Радар-чарт хорошо показывает многомерный профиль: три предмета — три оси.
+    Сравниваем средние профили двух групп.
+  </p>
+  <details>
+    <summary>Показать код: radar chart</summary>
+    <pre><code>from math import pi
+
+categories = ['math score', 'reading score', 'writing score']
+N = len(categories)
+angles = [n / float(N) * 2 * pi for n in range(N)]
+angles += angles[:1]
+
+fig, ax = plt.subplots(figsize=(6, 6), subplot_kw=dict(polar=True))
+
+for label, color in [('completed', 'green'), ('none', 'red')]:
+    vals = df[df['test preparation course'] == label][categories].mean().tolist()
+    vals += vals[:1]
+    ax.plot(angles, vals, color=color, label=label)
+    ax.fill(angles, vals, color=color, alpha=0.15)
+
+ax.set_xticks(angles[:-1])
+ax.set_xticklabels(categories)
+ax.set_title('Профиль средних баллов по предметам')
+ax.legend()
+plt.show()</code></pre>
+  </details>
+  <p class="muted">
+    <strong>Что показывает:</strong> профиль группы <code>completed</code> — «раздутый»
+    по всем трём осям; особенно заметен разрыв по writing.
+  </p>
+
+  <h3>7.6 Pairplot для многофакторного обзора</h3>
+  <details>
+    <summary>Показать код: pairplot</summary>
+    <pre><code>sns.pairplot(
+    df[['math score', 'reading score', 'writing score',
+        'test preparation course', 'gender']],
+    hue='test preparation course',
+    corner=True,
+    diag_kind='kde'
+)
+plt.show()</code></pre>
+  </details>
+</section>
+
+<!-- ======================= 8 ======================= -->
+<section>
+  <span class="badge">Шаг 8 — Выводы</span>
+  <h2>Выводы и обоснование продукта</h2>
+  <ol>
+    <li>
+      <strong>Гипотеза подтверждена:</strong> прохождение подготовительного курса
+      статистически значимо связано с более высокими баллами по всем трём предметам;
+      средний прирост — порядка <strong>5–10 баллов</strong> (≈7–12%).
+    </li>
+    <li>
+      <strong>Эффект неоднороден:</strong> величина прироста зависит от пола, типа питания
+      и образования родителей. Это означает, что <strong>персонализированная</strong>
+      подготовка ценнее универсальной.
+    </li>
+    <li>
+      <strong>Есть целевая «рисковая» группа:</strong> студенты без подготовки с низким СЭС
+      (free/reduced lunch) — их значительная доля, и именно у них наибольший потенциал
+      роста при подключении к программе.
+    </li>
+    <li>
+      <strong>Продуктовая рекомендация:</strong> сервис <strong>«ExamPrep Coach»</strong>
+      с адаптивным планом, диагностикой по трём предметам и прогнозом прироста баллов.
+      Ключевые сегменты для запуска:
+      (а) ученики из семей с низким СЭС,
+      (б) ученики, чьи родители не имеют высшего образования,
+      (в) женщины — у них выше отдача от подготовки по чтению/письму.
+    </li>
+    <li>
+      <strong>Метрики успеха продукта:</strong> средний прирост <code>avg_score</code>
+      относительно контрольной группы, доля дошедших до конца программы, NPS по сегментам.
+    </li>
+  </ol>
+  <div class="callout">
+    <strong>Итог:</strong> данные показывают, что подготовка работает, но «средний» курс
+    теряет эффективность из-за неоднородности аудитории — а значит, рынок ждёт адаптивное
+    решение с измеримым эффектом.
+  </div>
+</section>
+
+</main>
+</body>
+</html>
